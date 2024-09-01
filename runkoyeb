@@ -1,0 +1,4 @@
+#! /bin/bash
+
+echo "Run Eaglebot on Koyeb   !!!"
+python3 -m Eaglebot

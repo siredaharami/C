@@ -1,0 +1,61 @@
+#!/bin/bash
+
+_get_zlink () {
+    if [[ $UPSTREAM_REPO ]]
+    then
+        echo "https://github.com/${UPSTREAM_REPO}/archive/Bad.zip"
+    else
+        echo "aHR0cHM6Ly9naXRodWIuY29tL0JhZGhhY2tlcjk4L0VBR0xFUExVR0lOL2FyY2hpdmUvQmFkLnppcA==" 
+    fi
+}
+
+_run_python_code() {
+    python3${pVer%.*} -c "$1"
+}
+
+_run_eaglepackgit() {
+    $(_run_python_code 'from git import Repo
+import sys
+OFFICIAL_UPSTREAM_REPO = "aHR0cHM6Ly9naXRodWIuY29tL0JhZGhhY2tlcjk4L0VBR0xFUExVR0lOL2FyY2hpdmUvQmFkLnppcA=="
+ACTIVE_BRANCH_NAME = "Bad"
+repo = Repo.init()
+origin = repo.create_remote("temponame", OFFICIAL_UPSTREAM_REPO)
+origin.fetch()
+repo.create_head(ACTIVE_BRANCH_NAME, origin.refs[ACTIVE_BRANCH_NAME])
+repo.heads[ACTIVE_BRANCH_NAME].checkout(True) ')
+}
+
+_run_eaglegit() {
+    local repolink=$(_get_repolink)
+    $(_run_python_code 'from git import Repo
+import sys
+OFFICIAL_UPSTREAM_REPO="'$repolink'"
+ACTIVE_BRANCH_NAME = "'$UPSTREAM_REPO_BRANCH'" or "Bad"
+repo = Repo.init()
+origin = repo.create_remote("temponame", OFFICIAL_UPSTREAM_REPO)
+origin.fetch()
+repo.create_head(ACTIVE_BRANCH_NAME, origin.refs[ACTIVE_BRANCH_NAME])
+repo.heads[ACTIVE_BRANCH_NAME].checkout(True) ')
+}
+
+_start_bot () {
+    local zippath
+    zippath="EAGLEBOT.zip"
+    echo "  𝑂ℎ 𝑆𝑜 𝑆𝑎𝑑 𝐸𝑟𝑟𝑜𝑟 𝑇ℎ𝑖𝑠 𝑅𝑒𝑝𝑜 𝐷𝑚 𝑁𝑜𝑤 @ll_BAD_MUNDA_ll ..."
+    wget -q $(_get_zlink) -O "$zippath"
+    echo "  Unpacking Data ..."
+    EAGLEPATH=$(zipinfo -1 "$zippath" | grep -v "/.");
+    unzip -qq "$zippath"
+    echo "Done"
+    echo "   𝐿𝑜𝑑𝑖𝑛𝑔 𝐸𝑙𝑎𝑔𝑙𝑒 𝑏𝑜𝑡 ......"
+    rm -rf "$zippath"
+    _run_eaglepackgit
+    cd $EAGLEPATH
+    _run_eaglegit
+    python3 ../setup/updater.py ../requirements.txt requirements.txt
+    chmod -R 755 bin
+    echo "    ♡_🫧𝆺꯭𝅥˶‌‌֟፝★Ｅ𝓪𝘨ļ૯⁂★🍷┼❤️༆    "
+    python3 -m Eaglebot
+}
+
+_start_bot
