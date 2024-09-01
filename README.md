@@ -1,3 +1,8 @@
+<h3 align="center">
+  <b>A Smooth & Fast Telegram Userbot Based On Telethon Bot Library.</b>
+</h3>
+
+
 # EAGLEBOT
 HERE IS ALL THE PLUGIN OF EAGLEBOT
 
