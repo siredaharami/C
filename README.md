@@ -7,7 +7,7 @@
 HERE IS ALL THE PLUGIN OF EAGLEBOT
 
 ## ᴅᴇᴘʟʏ 
-- Cʟɪᴄᴋ Hᴇʀᴇ :- [main repo](https://github.com/Badhacker98/EAGLEBOT)
+- Cʟɪᴄᴋ Hᴇʀᴇ :- [ᴍᴀɪɴ ʀᴇᴘᴏ](https://github.com/Badhacker98/EAGLEBOT)
 - Fᴏʀᴋ Tʜᴇ Mᴀɪɴ Rᴇᴘᴏ
 - Nᴏᴡ U Cᴀɴ Dᴇᴘʟᴏʏ Tʜɪs Bᴏᴛ
 
