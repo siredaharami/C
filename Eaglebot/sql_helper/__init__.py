@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 # the secret configuration specific things
-from ..Config import config
+from ..Config import Config
 from ..core.logger import logging
 
 LOGS = logging.getLogger(__name__)
