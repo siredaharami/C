@@ -73,7 +73,7 @@ async def startupmessage():
             Config.EAGLEUBLOGO = await eagle.tgbot.send_file(
                 BOTLOG_CHATID,
                 "https://telegra.ph/file/56557dc496d3032450455.jpg",
-                caption=f"#START\n\n**__Version__**:- {eagleversion}\n\n**__Sudo__** :- {is_sudo}\n\n**Your EagleBot has been started successfully.**",
+                caption=f"#START\n\n**__Version__**:- {Eagleversion}\n\n**__Sudo__** :- {is_sudo}\n\n**Your EagleBot has been started successfully.**",
                 buttons=[(Button.url("Support", "https://t.me/PBX_CHAT"),)],
             )
     except Exception as e:
