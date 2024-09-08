@@ -5,7 +5,7 @@ from Eaglebot import BOTLOG_CHATID, PM_LOGGER_GROUP_ID
 
 from .Config import Config
 from .core.logger import logging
-from .core.session import Eagle
+from .core.session import eagle
 from .start import killer
 from .utils import (
     add_bot_to_logger_group,
