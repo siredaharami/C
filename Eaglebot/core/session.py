@@ -6,7 +6,7 @@ from telethon.sessions import StringSession
 from ..Config import Config
 from .client import EagleClient
 
-__version__ = "1.10.7"
+__version__ = "1.10.6"
 
 loop = None
 
