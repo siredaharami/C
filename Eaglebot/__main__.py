@@ -17,35 +17,33 @@ from .utils import (
     verifyLoggerGroup,
 )
 
-LOGS = logging.getLogger("𝐸𝑎𝑔𝑙𝑒 𝑈𝑠𝑒𝑟𝑏𝑜𝑡")
+LOGS = logging.getLogger("ᴇᴀɢʟᴇ ᴜsᴇʀʙᴏᴛ")
 
 print(Eaglebot.__copyright__)
-print("𝐿𝑖𝑐𝑒𝑛𝑠𝑒𝑑 𝑈𝑛𝑑𝑒𝑟 𝑇ℎ𝑒 𝑇𝑒𝑟𝑚𝑠 𝑂𝑓 𝑇ℎ𝑒 " + Eaglebot.__license__)
+print("ʟɪᴄᴇɴsᴇᴅ ᴜɴᴅᴇʀ ᴛʜᴇ ᴛᴇʀᴍs ᴏғ ᴛʜʀ " + Eaglebot.__license__)
 
 cmdhr = Config.HANDLER
 
 
 try:
-    LOGS.info("𝑆𝑡𝑟𝑎𝑖𝑛𝑔 𝐸𝑎𝑔𝑙𝑒 𝑈𝑠𝑒𝑟𝑏𝑜𝑡")
-    Eagle.loop.run_until_complete(setup_bot())
-    LOGS.info("𝑇𝑔 𝐵𝑜𝑡 𝑆𝑒𝑡𝑢𝑝 𝐶𝑜𝑚𝑝𝑙𝑒𝑡𝑒𝑑")
+    LOGS.info("sᴛᴀʀᴛ ᴛʜᴇ ᴇᴀɢʟᴇ ᴜsᴇʀʙᴏᴛ")
+    eagle.loop.run_until_complete(setup_bot())
+    LOGS.info("ᴛɢ ʙᴏᴛ sᴇᴛᴜᴘ ᴄᴏᴍᴘʟᴇᴛᴇᴅ")
 except Exception as e:
     LOGS.error(f"{e}")
     sys.exit()
-
-
 async def startup_process():
     try:
         await verifyLoggerGroup()
-        await load_plugins("𝑃𝑙𝑢𝑔𝑖𝑛𝑠")
-        await load_plugins("𝐴𝑠𝑠𝑖𝑠𝑡𝑎𝑛𝑔")
+        await load_plugins("ᴘʟᴜɢɪɴs")
+        await load_plugins("ᴀssɪsᴛᴀɴᴛ")
         await externalrepo()
         await killer()
         print("----------------")
-        print("𝑆𝑡𝑎𝑟𝑡𝑖𝑛𝑔 𝐵𝑜𝑡 𝑀𝑜𝑑𝑒 ")
-        print("♡_🫧𝆺꯭𝅥˶‌‌֟፝★Ｅ𝓪𝘨ļ૯⁂★🍷┼❤️༆ ℎ𝑎𝑠 𝐵𝑒𝑒𝑛 𝐷𝑒𝑝𝑙𝑜𝑦𝑒𝑑 𝑆𝑢𝑐𝑐𝑒𝑠𝑠𝑓𝑢𝑙𝑙𝑦⚜")
-        print("𝑂𝑤𝑛𝑒𝑟 - @ll_BAD_MUNDA_ll")
-        print("𝐺𝑟𝑜𝑢𝑝 - @PBX_CHAT")
+        print("sᴛᴀʀᴛɪɴɢ ʙᴏᴛ ᴍᴏᴅᴇ!")
+        print("ᴇᴀɢʟᴇʙᴏᴛ ʜᴀꜱ ʙᴇᴇɴ ᴅᴇᴘʟᴏʏᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ")
+        print("ᴏᴡɴᴇʀ - @ll_BAD_MUNDA_ll")
+        print("ɢʀᴏᴜᴘ - @PBX_CHAT")
         print("----------------")
         await verifyLoggerGroup()
         await add_bot_to_logger_group(BOTLOG_CHATID)
@@ -64,16 +62,17 @@ async def externalrepo():
             Config.EXTERNAL_REPO, Config.EXTERNAL_REPOBRANCH, "xtraplugins"
         )
     if Config.VCMODE:
-        await install_externalrepo(Config.VC_REPO, Config.VC_REPOBRANCH, "Eaglevc")
+        await install_externalrepo(Config.VC_REPO, Config.VC_REPOBRANCH, "eaglevc")
 
 
-Eagle.loop.run_until_complete(startup_process())
+eagle.loop.run_until_complete(startup_process())
 
 if len(sys.argv) not in (1, 3, 4):
-    Eagle.disconnect()
+    eagle.disconnect()
 else:
     try:
-        Eagle.run_until_disconnected()
+        eagle.run_until_disconnected()
     except ConnectionError:
         pass
-
+        
+        
