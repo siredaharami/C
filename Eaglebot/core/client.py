@@ -48,7 +48,7 @@ REGEX_ = REGEX()
 sudo_enabledcmds = sudo_enabled_cmds()
 
 
-class eagleClient(TelegramClient):
+class EagleClient(TelegramClient):
     def eagle_cmd(
         self: TelegramClient,
         pattern: str or tuple = None,
@@ -331,14 +331,16 @@ class eagleClient(TelegramClient):
         self.running_processes.clear()
 
 
-eagleClient.fast_download_file = download_file
-eagleClient.fast_upload_file = upload_file
-eagleClient.reload = restart_script
-eagleClient.get_msg_link = get_message_link
-eagleClient.check_testcases = checking
+EagleClient.fast_download_file = download_file
+EagleClient.fast_upload_file = upload_file
+EagleClient.reload = restart_script
+EagleClient.get_msg_link = get_message_link
+EagleClient.check_testcases = checking
 try:
     send_message_check = TelegramClient.send_message
 except AttributeError:
-    eagleClient.send_message = send_message
-    eagleClient.send_file = send_file
-    eagleClient.edit_message = edit_message
+    EagleClient.send_message = send_message
+    EagleClient.send_file = send_file
+    EagleClient.edit_message = edit_message
+
+                
