@@ -8,7 +8,7 @@ from pathlib import Path
 from telethon import Button, functions, types, utils
 from telethon.tl.functions.channels import JoinChannelRequest
 
-from Eaglebot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID, eagleversion
+from Eaglebot import BOTLOG, BOTLOG_CHATID, PM_LOGGER_GROUP_ID, Eagleversion
 
 from ..Config import Config
 from ..core.logger import logging
