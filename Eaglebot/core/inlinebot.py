@@ -74,10 +74,8 @@ async def on_plug_in_callback_query_handler(event):
         ),
         (Button.inline(f"👨‍💻 Main Menu", data="mainmenu"),),
     ]
-    await event.edit(
-        buttons=buttons,
-        link_preview=False,
-    )
+
+await event.edit(text, buttons=buttons)
 
 
 def main_menu():
