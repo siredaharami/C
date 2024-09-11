@@ -13,6 +13,7 @@ from youtubesearchpython import VideosSearch
 
 from ..Config import Config
 from ..core.session import eagle
+from ..core.managers import eod, eor
 from ..helpers.functions import rand_key
 from ..helpers.functions.utube import (
     download_button,
