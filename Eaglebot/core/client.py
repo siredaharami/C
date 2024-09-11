@@ -342,5 +342,4 @@ except AttributeError:
     EagleClient.send_message = send_message
     EagleClient.send_file = send_file
     EagleClient.edit_message = edit_message
-
-                
+            
