@@ -27,14 +27,13 @@ menu_category = "bot"
 botusername = Config.BOT_USERNAME
 cmhd = Config.HANDLER
 
-
-@eagle.bot_cmd(
+@legend.bot_cmd(
     pattern=f"^/help({botusername})?([\s]+)?$",
     incoming=True,
 )
 async def bot_help(event):
     await event.reply(
-        f"""👨‍💻 Note : **__This commands work only in this bot__ {botusername}
+        f"""**👨‍💻 Note : **__This commands work only in this bot__ {botusername}
 🔰 Add this Bot In Group To Access Command In Group 🔰**
 
 ♦️ **Cmd : **/alive
@@ -88,7 +87,7 @@ async def bot_help(event):
 ♦️ **Cmd :** /broadcast
 🚩 **Info :** __Reply to a message to get broadcasted to every user who started your bot. To get list of users use__ `{cmhd}bot_users`.
 👨‍💻 **Note :** if user stoped/blocked the bot then he will be removed from your database that is he will erased from the bot_starters list
-""
+"""
     )
 
 
