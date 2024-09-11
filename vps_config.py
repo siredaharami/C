@@ -26,3 +26,9 @@ class Development(Config):
     VCMODE = False
     # Your City's TimeZone
     TZ = "Asia/Kolkata"
+    # Random stuff Key
+    RANDOM_STUFF_API_KEY = ""
+    # your logger group Id
+    PRIVATE_GROUP_BOT_API_ID = 
+    # owner id
+    OWNER_ID = 5144246533
