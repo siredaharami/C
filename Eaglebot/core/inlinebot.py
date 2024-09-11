@@ -52,7 +52,7 @@ def ibuild_keyboard(buttons):
     return keyb
 
 
-@eagle.tgbot.on(CallbackQuery(data=re.compile(b"help_k_minu")))
+@eagle.tgbot.on(CallbackQuery(data=re.compile(b"sukh")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     buttons = [
@@ -87,7 +87,7 @@ def main_menu():
     buttons = [
         [custom.Button.inline("✨ ɪɴғᴏ ✨", data="check")],
         [
-            custom.Button.inline("📂 ᴘʟᴜɢɪɴs 📂", data="help_k_minu"),
+            custom.Button.inline("📂 ᴘʟᴜɢɪɴs 📂", data="sukh"),
             Button.url("🦅 ᴀssɪsᴛᴀɴᴛ 🦅", f"https://t.me/{tol}"),
         ],
         [
@@ -187,13 +187,13 @@ def paginate_help(
                 (
                     Button.inline("⬅️", data=f"{prefix}_prev({modulo_page})_plugin"),
                     Button.inline(
-                        f"{HELP_EMOJI} Back {HELP_EMOJI}", data="help_k_minu"
+                        f"{HELP_EMOJI} Back {HELP_EMOJI}", data="sukh"
                     ),
                     Button.inline("➡️", data=f"{prefix}_next({modulo_page})_plugin"),
                 )
             ]
         else:
-            pairs = pairs + [(Button.inline("⬅️ Back", data="help_k_minu"),)]
+            pairs = pairs + [(Button.inline("⬅️ Back", data="sukh"),)]
     elif len(pairs) > number_of_rows:
         if category_pgno < 0:
             category_pgno = len(pairs) + category_pgno
