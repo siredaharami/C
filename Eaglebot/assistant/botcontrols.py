@@ -89,7 +89,7 @@ async def bot_help(event):
 🚩 **Info :** __Reply to a message to get broadcasted to every user who started your bot. To get list of users use__ `{cmhd}bot_users`.
 👨‍💻 **Note :** if user stoped/blocked the bot then he will be removed from your database that is he will erased from the bot_starters list
 ""
-    ))
+    )
 
 
 @eagle.bot_cmd(pattern="^/broadcast$", from_users=Config.OWNER_ID)
