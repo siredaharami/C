@@ -20,31 +20,36 @@ from .utils import (
 LOGS = logging.getLogger("ᴇᴀɢʟᴇ ᴜsᴇʀʙᴏᴛ")
 
 print(Eaglebot.__copyright__)
-print("ʟɪᴄᴇɴsᴇᴅ ᴜɴᴅᴇʀ ᴛʜᴇ ᴛᴇʀᴍs ᴏғ ᴛʜʀ " + Eaglebot.__license__)
+print("𝐿𝑖𝑐𝑒𝑛𝑠𝑒𝑑 𝑈𝑛𝑑𝑒𝑟 𝑇ℎ𝑒 𝑇𝑒𝑟𝑚𝑠 𝑂𝑓 𝑇ℎ𝑒 " + Eaglebot.__license__)
 
 cmdhr = Config.HANDLER
 
 
 try:
-    LOGS.info("sᴛᴀʀᴛ ᴛʜᴇ ᴇᴀɢʟᴇ ᴜsᴇʀʙᴏᴛ")
+    LOGS.info("𝑆𝑡𝑟𝑎𝑖𝑛𝑔 𝐸𝑎𝑔𝑙𝑒 𝑈𝑠𝑒𝑟𝑏𝑜𝑡")
     eagle.loop.run_until_complete(setup_bot())
-    LOGS.info("ᴛɢ ʙᴏᴛ sᴇᴛᴜᴘ ᴄᴏᴍᴘʟᴇᴛᴇᴅ")
+    LOGS.info("𝑇𝑔 𝐵𝑜𝑡 𝑆𝑒𝑡𝑢𝑝 𝐶𝑜𝑚𝑝𝑙𝑒𝑡𝑒𝑑")
 except Exception as e:
     LOGS.error(f"{e}")
     sys.exit()
 async def startup_process():
     try:
         await verifyLoggerGroup()
-        await load_plugins("ᴘʟᴜɢɪɴs")
-        await load_plugins("ᴀssɪsᴛᴀɴᴛ")
-        await externalrepo()
+        await load_plugins("plugins")
+        await load_plugins("assistant")
         await killer()
-        print("----------------")
-        print("sᴛᴀʀᴛɪɴɢ ʙᴏᴛ ᴍᴏᴅᴇ!")
-        print("ᴇᴀɢʟᴇʙᴏᴛ ʜᴀꜱ ʙᴇᴇɴ ᴅᴇᴘʟᴏʏᴇᴅ ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ")
-        print("ᴏᴡɴᴇʀ - @ll_BAD_MUNDA_ll")
-        print("ɢʀᴏᴜᴘ - @PBX_CHAT")
-        print("----------------")
+        LOGS.info(
+        "============================================================================"
+    )
+        LOGS.info("||               ʏᴀʏ ʏᴏᴜʀ ᴜꜱᴇʀʙᴏᴛ ɪꜱ ᴏꜰꜰɪᴄɪᴀʟʟʏ ᴡᴏʀᴋɪɴɢ.!!!"
+    )
+        LOGS.info(
+        f"||   ᴄᴏɴɢʀᴀᴛᴜʟᴀᴛɪᴏɴ, ɴᴏᴡ ᴛʏᴘᴇ {cmdhr}ᴀʟɪᴠᴇ ᴛᴏ ꜱᴇᴇ ᴍᴇꜱꜱᴀɢᴇ ɪꜰ ᴇᴀɢʟᴇ ɪꜱ ʟɪᴠᴇ"
+    )
+        LOGS.info("||   ɪꜰ ʏᴏᴜ ɴᴇᴇᴅ ᴀꜱꜱɪꜱᴛᴀɴᴄᴇ, ʜᴇᴀᴅ ᴛᴏ https://t.me/PBX_CHAT")
+        LOGS.info(
+        "============================================================================"
+    )
         await verifyLoggerGroup()
         await add_bot_to_logger_group(BOTLOG_CHATID)
         if PM_LOGGER_GROUP_ID != -100:
@@ -56,15 +61,6 @@ async def startup_process():
         sys.exit()
 
 
-async def externalrepo():
-    if Config.EXTERNAL_REPO:
-        await install_externalrepo(
-            Config.EXTERNAL_REPO, Config.EXTERNAL_REPOBRANCH, "xtraplugins"
-        )
-    if Config.VCMODE:
-        await install_externalrepo(Config.VC_REPO, Config.VC_REPOBRANCH, "eaglevc")
-
-
 eagle.loop.run_until_complete(startup_process())
 
 if len(sys.argv) not in (1, 3, 4):
@@ -74,5 +70,4 @@ else:
         eagle.run_until_disconnected()
     except ConnectionError:
         pass
-        
         
