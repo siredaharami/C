@@ -165,20 +165,11 @@ class Config(object):
     EAGLEUBLOGO = None
     BOTLOG = False
     BOTLOG_CHATID = 0
-    # External plugins repo
-    EXTERNAL_REPO = os.environ.get("EXTERNAL_REPO", None)
-    if bool(EXTERNAL_REPO and (EXTERNAL_REPO.lower() != "False")):
-        if not url(EXTERNAL_REPO):
-            EXTERNAL_REPO = "https://github.com/badmunda98"
-    else:
-        EXTERNAL_REPO = None
-    EXTERNAL_REPOBRANCH = os.environ.get("EXTERNAL_REPOBRANCH", "main")
     # for vc plugins
-    VCMODE = os.environ.get("VCMODE", False)
-    VCMODE = bool(VCMODE and (VCMODE.lower() != "false"))
+    VCMODE = os.environ.get("VCMODE", True)
     VC_SESSION = os.environ.get("VC_SESSION", None)
-    VC_REPO = os.environ.get("VC_REPO", "https://github.com/badmunda98")
-    VC_REPOBRANCH = os.environ.get("VC_REPOBRANCH", "test")
+    VC_REPO = os.environ.get("VC_REPO", "https://github.com/badmunda98/EagleVc")
+    VC_REPOBRANCH = os.environ.get("VC_REPOBRANCH", "Bad")
 
 
 class Production(Config):
