@@ -22,6 +22,7 @@ bot = eagle
 
 
 StartTime = time.time()
+eagleversion = "α • 3.0"
 Eagleversion = "α • 3.0"
 
 
