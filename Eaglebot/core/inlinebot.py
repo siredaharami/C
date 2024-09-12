@@ -51,29 +51,13 @@ def ibuild_keyboard(buttons):
             keyb.append([Button.url(btn[0], btn[1])])
     return keyb
 
-
-@eagle.tgbot.on(CallbackQuery(data=re.compile(b"sukh")))
-@check_owner
-async def on_plug_in_callback_query_handler(event):
-    buttons = [
-        (
-            Button.inline(f"Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
-            Button.inline(f"Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
-        ),
-        (Button.inline(f"👨‍💻 Main Menu", data="mainmenu"),),
-    ]
-    await event.edit(
-        buttons=buttons,
-)
-
-
 def main_menu():
     tol = gvarstatus("BOT_USERNAME")
     text = f"⚜ {mention}  ⚜"
     buttons = [
         [custom.Button.inline("✨ ɪɴғᴏ ✨", data="check")],
         [
-            custom.Button.inline("📂 ᴘʟᴜɢɪɴs 📂", data="sukh"),
+            custom.Button.inline("📂 ᴘʟᴜɢɪɴs 📂", data="admin_menu"),
             Button.url("🦅 ᴀssɪsᴛᴀɴᴛ 🦅", f"https://t.me/{tol}"),
         ],
         [
