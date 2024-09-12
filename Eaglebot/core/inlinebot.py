@@ -61,18 +61,6 @@ async def on_plug_in_callback_query_handler(event):
             Button.inline(f"Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
         ),
         (
-            Button.inline(f"Fun ({len(GRP_INFO['fun'])})", data="fun_menu"),
-            Button.inline(f"Misc ({len(GRP_INFO['misc'])})", data="misc_menu"),
-        ),
-        (
-            Button.inline(f"Tools ({len(GRP_INFO['tools'])})", data="tools_menu"),
-            Button.inline(f"Utils ({len(GRP_INFO['utils'])})", data="utils_menu"),
-        ),
-        (
-            Button.inline(f"Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
-            Button.inline(f"Useless ({len(GRP_INFO['useless'])})", data="useless_menu"),
-        ),
-        (Button.inline(f"👨‍💻 Main Menu", data="mainmenu"),),
     ]
     await event.edit(
         f"🔱『{mention}』🔱",
