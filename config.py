@@ -27,3 +27,4 @@ class Development(Config):
     PRIVATE_GROUP_BOT_API_ID = -1002342412856
     # owner id
     OWNER_ID = 5144246533
+    SPAM = "ON"
