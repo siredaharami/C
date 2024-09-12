@@ -60,7 +60,7 @@ async def on_plug_in_callback_query_handler(event):
             Button.inline(f"Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
             Button.inline(f"Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
         ),
-        (
+        (Button.inline(f"👨‍💻 Main Menu", data="mainmenu"),),
     ]
     await event.edit(
         f"🔱『{mention}』🔱",
