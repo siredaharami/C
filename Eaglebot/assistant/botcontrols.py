@@ -27,7 +27,7 @@ menu_category = "bot"
 botusername = Config.BOT_USERNAME
 cmhd = Config.HANDLER
 
-@legend.bot_cmd(
+@eaglebot.bot_cmd(
     pattern=f"^/help({botusername})?([\s]+)?$",
     incoming=True,
 )
