@@ -66,7 +66,7 @@ def generate_telethon_session():
     API_HASH = input("\nEnter API HASH here: ")
     with TelegramClient(StringSession(), APP_ID, API_HASH) as Pbxbot:
         print("\nYour PbxBot Session Is sent in your Telegram Saved Messages.")
-        Pbxbot.send_message(
+        Hell.send_message(
             "me",
             f"#PBXBOT #TELETHON \n\n`{Pbxbot.session.save()}`",
         )
