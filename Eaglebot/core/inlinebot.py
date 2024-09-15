@@ -12,7 +12,7 @@ from telethon.events import CallbackQuery, InlineQuery
 from youtubesearchpython import VideosSearch
 
 from ..Config import Config
-from ..core.session import eagle
+from ..core.session import legend
 from ..helpers.functions import rand_key
 from ..helpers.functions.utube import (
     download_button,
@@ -21,7 +21,7 @@ from ..helpers.functions.utube import (
     result_formatter,
     ytsearch_data,
 )
-from ..plugins import ALIVE_NAME, USERID, eagle_grp, mention
+from ..plugins import ALIVE_NAME, USERID, Legend_grp, mention
 from ..sql_helper.globals import gvarstatus
 from . import CMD_INFO, GRP_INFO, PLG_INFO, check_owner
 from .logger import logging
@@ -33,39 +33,49 @@ BTN_URL_REGEX = re.compile(r"(\[([^\[]+?)\]\<buttonurl:(?:/{0,2})(.+?)(:same)?\>
 tr = Config.HANDLER
 
 
-def getkey(val):
-    for key, value in GRP_INFO.items():
-        for plugin in value:
-            if val == plugin:
-                return key
-    return None
-
-
-def ibuild_keyboard(buttons):
-    keyb = []
-    for btn in buttons:
-        if btn[2] and keyb:
-            keyb[-1].append(Button.url(btn[0], btn[1]))
-        else:
-            keyb.append([Button.url(btn[0], btn[1])])
-    return keyb
-
-
-@eagle.tgbot.on(CallbackQuery(data=re.compile(b"help_k_minu")))
-@check_owner
-async def on_plug_in_callback_query_handler(event):
-    buttons = [
-        (
-            Button.inline(f"Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
-            Button.inline(f"Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
-        ),
-        (Button.inline(f"👨‍💻 Main Menu", data="mainmenu"),),
-    ]
-    await event.edit(
-        f"🔱『{mention}』🔱",
-        buttons=buttons,
-        link_preview=False,
+def get_thumb(name=None, url=None):
+    if url is None:
+        url = f"https://github.com/siredaharami/C/tree/Bad/Eaglebot/helpers/resources/pics/{name}?raw=true"
+    return types.InputWebDocument(
+        url=url, size=0, mime_type="image/jpeg", attributes=[]
     )
+
+
+def main_menu():
+    text = f" ᴇᴀɢʟᴇ ᴜsᴇʀʙᴏᴛ\
+        \n𝗣𝗿𝗼𝘃𝗶𝗱𝗲𝗱 𝗯𝘆 {mention}"
+    buttons = [
+        (Button.inline("ℹ️ Info", data="check"),),
+        (
+            Button.inline(f"👮‍♂️ Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
+            Button.inline(f"🤖 Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
+        ),
+        (
+            Button.inline(f"🎨 Fun ({len(GRP_INFO['fun'])})", data="fun_menu"),
+            Button.inline(f"🧩 Misc ({len(GRP_INFO['misc'])})", data="misc_menu"),
+        ),
+        (
+            Button.inline(f"🧰 Tools ({len(GRP_INFO['tools'])})", data="tools_menu"),
+            Button.inline(f"🗂 Utils ({len(GRP_INFO['utils'])})", data="utils_menu"),
+        ),
+        (
+            Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
+            Button.inline("🔒 Close Menu", data="close"),
+        ),
+    ]
+    if Config.BADCAT:
+        switch_button = [
+            (
+                Button.inline(f"➕ Extra ({len(GRP_INFO['extra'])})", data="extra_menu"),
+                Button.inline(
+                    f"⚰️ Useless ({len(GRP_INFO['useless'])})", data="useless_menu"
+                ),
+            ),
+            (Button.inline("🔒 Close Menu", data="close"),),
+        ]
+        buttons = buttons[:-1] + switch_button
+
+    return text, buttons
 
 
 def main_menu():
@@ -78,18 +88,80 @@ def main_menu():
             Button.url("✨ Assistant ✨", f"https://t.me/{tol}"),
         ],
         [
-        (
-            Button.inline(f"Admin ({len(GRP_INFO['admin'])})", data="admin_menu"),
-            Button.inline(f"Bot ({len(GRP_INFO['bot'])})", data="bot_menu"),
-        ),
-        ],
-        [
             custom.Button.inline("⚜ Alive ⚜", data="stats"),
-            Button.url("Support 🇮🇳", "https://t.me/Eaglebot_AI"),
+            Button.url("Support 🇮🇳", "https://t.me/LegendBot_AI"),
         ],
         [custom.Button.inline("❌", data="clise")],
     ]
     return text, buttons
+
+async def build_article(
+    event,
+    media=None,
+    title=None,
+    text=None,
+    description=None,
+    buttons=None,
+    thumbnail=None,
+    parse_mode="md",
+    link_preview=False,
+):
+    builder = event.builder
+    photo_document = None
+    if media:
+        if not media.endswith((".jpg", ".jpeg", ".png")):
+            # Return a document object with the provided media URL
+            return builder.document(
+                media,
+                title=title,
+                description=description,
+                text=text,
+                buttons=buttons,
+            )
+        # Create an InputWebDocument object for the media file
+        photo_document = get_thumb(url=media)
+    if thumbnail and isinstance(thumbnail, str):
+        thumbnail = get_thumb(url=thumbnail)
+    # Return an article object with the provided properties
+    return builder.article(
+        title=title,
+        description=description,
+        type="photo" if photo_document else "article",
+        file=media,
+        thumb=thumbnail or photo_document,
+        content=photo_document,
+        text=text,
+        buttons=buttons,
+        link_preview=link_preview,
+        parse_mode=parse_mode,
+    )
+
+
+async def help_article(event):
+    help_info = main_menu()
+    return await build_article(
+        event,
+        title="Help Menu",
+        description="Help menu for Eaglebot.",
+        thumbnail=get_thumb("help.png"),
+        text=help_info[0],
+        buttons=help_info[1],
+    )
+
+
+async def age_verification_article(event):
+    buttons = [
+        Button.inline(text="Yes I'm 18+", data="age_verification_true"),
+        Button.inline(text="No I'm Not", data="age_verification_false"),
+    ]
+    return await build_article(
+        event,
+        title="Age verification",
+        text="**ARE YOU OLD ENOUGH FOR THIS ?**",
+        buttons=buttons,
+        media="https://i.imgur.com/Zg58iXc.jpg",
+    )
+
 
 
 def command_in_category(cname):
@@ -107,21 +179,19 @@ def paginate_help(
     plugins=True,
     category_plugins=None,
     category_pgno=0,
-):  # sourcery no-metrics
+):  # sourcery no-metrics  # sourcery skip: low-code-quality
     try:
-        number_of_rows = int(gvarstatus("ROWS_IN_HELP") or 7)
+        number_of_rows = int(gvarstatus("NO_OF_ROWS_IN_HELP") or 5)
     except (ValueError, TypeError):
-        number_of_rows = 7
+        number_of_rows = 5
     try:
-        number_of_cols = int(gvarstatus("COLUMNS_IN_HELP") or 2)
+        number_of_cols = int(gvarstatus("NO_OF_COLUMNS_IN_HELP") or 2)
     except (ValueError, TypeError):
         number_of_cols = 2
-    LOL_EMOJI = gvarstatus("HELP_EMOJI") or "💝"
-    lal = [x for x in LOL_EMOJI.split()]
-    HELP_EMOJI = random.choice(lal)
+    HELP_EMOJI = gvarstatus("HELP_EMOJI") or " "
     helpable_plugins = [p for p in loaded_plugins if not p.startswith("_")]
     helpable_plugins = sorted(helpable_plugins)
-    if len(LOL_EMOJI) == 2:
+    if len(HELP_EMOJI) == 2:
         if plugins:
             modules = [
                 Button.inline(
@@ -178,15 +248,13 @@ def paginate_help(
                 modulo_page * number_of_rows : number_of_rows * (modulo_page + 1)
             ] + [
                 (
-                    Button.inline("⬅️", data=f"{prefix}_prev({modulo_page})_plugin"),
-                    Button.inline(
-                        f"{HELP_EMOJI} Back {HELP_EMOJI}", data="help_k_minu"
-                    ),
-                    Button.inline("➡️", data=f"{prefix}_next({modulo_page})_plugin"),
+                    Button.inline("⌫", data=f"{prefix}_prev({modulo_page})_plugin"),
+                    Button.inline("⚙️ Main Menu", data="mainmenu"),
+                    Button.inline("⌦", data=f"{prefix}_next({modulo_page})_plugin"),
                 )
             ]
         else:
-            pairs = pairs + [(Button.inline("⬅️ Back", data="help_k_minu"),)]
+            pairs = pairs + [(Button.inline("⚙️ Main Menu", data="mainmenu"),)]
     elif len(pairs) > number_of_rows:
         if category_pgno < 0:
             category_pgno = len(pairs) + category_pgno
@@ -195,15 +263,15 @@ def paginate_help(
         ] + [
             (
                 Button.inline(
-                    "⬅️",
+                    "⌫",
                     data=f"{prefix}_prev({modulo_page})_command_{category_plugins}_{category_pgno}",
                 ),
                 Button.inline(
-                    f"{HELP_EMOJI} Back {HELP_EMOJI}",
+                    "⬅️ Back ",
                     data=f"back_plugin_{category_plugins}_{category_pgno}",
                 ),
                 Button.inline(
-                    "➡️",
+                    "⌦",
                     data=f"{prefix}_next({modulo_page})_command_{category_plugins}_{category_pgno}",
                 ),
             )
@@ -214,514 +282,30 @@ def paginate_help(
         pairs = pairs + [
             (
                 Button.inline(
-                    "⬅️ Back",
+                    "⬅️ Back ",
                     data=f"back_plugin_{category_plugins}_{category_pgno}",
                 ),
             )
         ]
     return pairs
+    
 
-
-@eagle.tgbot.on(InlineQuery)
-async def inline_handler(event):  # sourcery no-metrics
-    builder = event.builder
-    result = None
-    query = event.text
-    string = query.lower()
-    query.split(" ", 2)
-    str_y = query.split(" ", 1)
-    string.split()
-    query_user_id = event.query.user_id
-    if query_user_id == Config.OWNER_ID or query_user_id in Config.SUDO_USERS:
-        hmm = re.compile("troll (.*) (.*)")
-        match = re.findall(hmm, query)
-        inf = re.compile("secret (.*) (.*)")
-        match2 = re.findall(inf, query)
-        hid = re.compile("hide (.*)")
-        match3 = re.findall(hid, query)
-        if query.startswith("**Eaglebot"):
-            buttons = [
-                (Button.url(f"{ALIVE_NAME}", f"tg://openmessage?user_id={USERID}"),),
-                (
-                    Button.inline("Stats", data="stats"),
-                    Button.url("Repo", "https://github.com/ITS-Eaglebot/Eaglebot"),
-                ),
-            ]
-            ALIVE_PIC = gvarstatus("ALIVE_PIC")
-            if ALIVE_PIC is None:
-                I_IMG = "https://telegra.ph/file/f3facc08397bb5728de26.jpg"
-            else:
-                lol = list(ALIVE_PIC.split())
-                I_IMG = random.choice(lol)
-            if I_IMG and I_IMG.endswith((".jpg", ".png")):
-                result = builder.photo(
-                    I_IMG,
-                    text=query,
-                    buttons=buttons,
-                )
-            elif I_IMG:
-                result = builder.document(
-                    I_IMG,
-                    title="Alive eagle",
-                    text=query,
-                    buttons=buttons,
-                )
-            else:
-                result = builder.article(
-                    title="Alive eagle",
-                    text=query,
-                    buttons=buttons,
-                )
-            await event.answer([result] if result else None)
-        if query.startswith("**⚜ Eaglebot"):
-            grp_username = gvarstatus("GROUP_USERNAME") or "Eaglebot_OP"
-            chnl_username = gvarstatus("CHANNEL_USERNAME") or "Eaglebot_AI"
-            buttons = [
-                (Button.url(f"{ALIVE_NAME}", f"tg://openmessage?user_id={USERID}"),),
-                (
-                    Button.url("Group", f"t.me/{grp_username}"),
-                    Button.url("Channel", f"t.me/{chnl_username}"),
-                ),
-            ]
-            ALIVE_PIC = gvarstatus("ALIVE_PIC")
-            if ALIVE_PIC is None:
-                IMG = "https://telegra.ph/file/a4a6a40205873ae7f7ceb.jpg"
-            else:
-                PIC = list(ALIVE_PIC.split())
-                IMG = random.choice(PIC)
-            if IMG and IMG.endswith((".jpg", ".png")):
-                result = builder.photo(
-                    IMG,
-                    text=query,
-                    buttons=buttons,
-                )
-            elif IMG:
-                result = builder.document(
-                    IMG,
-                    title="Alive eagle",
-                    text=query,
-                    buttons=buttons,
-                )
-            else:
-                result = builder.article(
-                    title="Alive eagle",
-                    text=query,
-                    buttons=buttons,
-                )
-            await event.answer([result] if result else None)
-        elif query == "repo":
-            result = builder.article(
-                title="Repository",
-                text=f"**⚜ eagleary Af Eaglebot ⚜**",
-                buttons=[
-                    [Button.url("♥️ Tutorial ♥", "https://youtu.be/CH_KO1wim2o")],
-                    [
-                        Button.url(
-                            "📍 𝚁𝚎𝚙𝚘 📍", "https://github.com/eagle-AI/Eaglebot"
-                        )
-                    ],
-                    [
-                        Button.url(
-                            "💞 Deploy 💞",
-                            "https://heroku.com/deploy?template=https://github.com/eagle-AI/Eaglebot",
-                        )
-                    ],
-                ],
-            )
-            await event.answer([result] if result else None)
-        elif query.startswith("Inline buttons"):
-            markdown_note = query[14:]
-            prev = 0
-            note_data = ""
-            buttons = []
-            media = None
-            eaglemedia = MEDIA_PATH_REGEX.search(markdown_note)
-            if eaglemedia:
-                media = eaglemedia.group(2)
-                markdown_note = markdown_note.replace(eaglemedia.group(0), "")
-            for match in BTN_URL_REGEX.finditer(markdown_note):
-                n_escapes = 0
-                to_check = match.start(1) - 1
-                while to_check > 0 and markdown_note[to_check] == "\\":
-                    n_escapes += 1
-                    to_check -= 1
-                if n_escapes % 2 == 0:
-                    buttons.append(
-                        (match.group(2), match.group(3), bool(match.group(4)))
-                    )
-                    note_data += markdown_note[prev : match.start(1)]
-                    prev = match.end(1)
-                elif n_escapes % 2 == 1:
-                    note_data += markdown_note[prev:to_check]
-                    prev = match.start(1) - 1
-                else:
-                    break
-            else:
-                note_data += markdown_note[prev:]
-            message_text = note_data.strip()
-            tl_ib_buttons = ibuild_keyboard(buttons)
-            if media and media.endswith((".jpg", ".png")):
-                result = builder.photo(
-                    media,
-                    text=message_text,
-                    buttons=tl_ib_buttons,
-                )
-            elif media:
-                result = builder.document(
-                    media,
-                    title="Inline creator",
-                    text=message_text,
-                    buttons=tl_ib_buttons,
-                )
-            else:
-                result = builder.article(
-                    title="Inline creator",
-                    text=message_text,
-                    buttons=tl_ib_buttons,
-                    link_preview=False,
-                )
-            await event.answer([result] if result else None)
-        elif match:
-            query = query[7:]
-            user, txct = query.split(" ", 1)
-            builder = event.builder
-            troll = os.path.join("./Eaglebot", "troll.txt")
-            try:
-                jsondata = json.load(open(troll))
-            except Exception:
-                jsondata = False
-            try:
-                # if u is user id
-                u = int(user)
-                try:
-                    u = await event.client.get_entity(u)
-                    if u.username:
-                        EAGLE = f"@{u.username}"
-                    else:
-                        EAGLE = f"[{u.first_name}](tg://user?id={u.id})"
-                    u = int(u.id)
-                except ValueError:
-                    # ValueError: Could not find the input entity
-                    EAGLE = f"[user](tg://user?id={u})"
-            except ValueError:
-                # if u is username
-                try:
-                    u = await event.client.get_entity(user)
-                except ValueError:
-                    return
-                if u.username:
-                    EAGLE = f"@{u.username}"
-                else:
-                    EAGLE = f"[{u.first_name}](tg://user?id={u.id})"
-                u = int(u.id)
-            except Exception:
-                return
-            timestamp = int(time.time() * 2)
-            newtroll = {str(timestamp): {"userid": u, "text": txct}}
-
-            buttons = [Button.inline("Show Message", data=f"troll_{timestamp}")]
-            result = builder.article(
-                title="Troll Message",
-                text=f"🌹 Only This : {EAGLE} cannot access this message !",
-                buttons=buttons,
-            )
-            await event.answer([result] if result else None)
-            if jsondata:
-                jsondata.update(newtroll)
-                json.dump(jsondata, open(troll, "w"))
-            else:
-                json.dump(newtroll, open(troll, "w"))
-        elif match2:
-            query = query[7:]
-            user, txct = query.split(" ", 1)
-            builder = event.builder
-            secret = os.path.join("./Eaglebot", "secrets.txt")
-            try:
-                jsondata = json.load(open(secret))
-            except Exception:
-                jsondata = False
-            try:
-                # if u is user id
-                u = int(user)
-                try:
-                    u = await event.client.get_entity(u)
-                    if u.username:
-                        EAGLE = f"@{u.username}"
-                    else:
-                        EAGLE = f"[{u.first_name}](tg://user?id={u.id})"
-                    u = int(u.id)
-                except ValueError:
-                    # ValueError: Could not find the input entity
-                    EAGLE = f"[user](tg://user?id={u})"
-            except ValueError:
-                # if u is username
-                try:
-                    u = await event.client.get_entity(user)
-                except ValueError:
-                    return
-                if u.username:
-                    EAGLE = f"@{u.username}"
-                else:
-                    EAGLE = f"[{u.first_name}](tg://user?id={u.id})"
-                u = int(u.id)
-            except Exception:
-                return
-            timestamp = int(time.time() * 2)
-            newsecret = {str(timestamp): {"userid": u, "text": txct}}
-
-            buttons = [Button.inline("Show Message 🔐", data=f"secret_{timestamp}")]
-            result = builder.article(
-                title="secret message",
-                text=f"🔒 A whisper message to {EAGLE}, Only he/she can open it.",
-                buttons=buttons,
-            )
-            await event.answer([result] if result else None)
-            if jsondata:
-                jsondata.update(newsecret)
-                json.dump(jsondata, open(secret, "w"))
-            else:
-                json.dump(newsecret, open(secret, "w"))
-        elif match3:
-            query = query[5:]
-            builder = event.builder
-            hide = os.path.join("./Eaglebot", "hide.txt")
-            try:
-                jsondata = json.load(open(hide))
-            except Exception:
-                jsondata = False
-            timestamp = int(time.time() * 2)
-            newhide = {str(timestamp): {"text": query}}
-
-            buttons = [Button.inline("Read Message ", data=f"hide_{timestamp}")]
-            result = builder.article(
-                title="Hidden Message",
-                text=f"✖️✖️✖️✖️✖️",
-                buttons=buttons,
-            )
-            await event.answer([result] if result else None)
-            if jsondata:
-                jsondata.update(newhide)
-                json.dump(jsondata, open(hide, "w"))
-            else:
-                json.dump(newhide, open(hide, "w"))
-        elif string == "help":
-            oso = gvarstatus("HELP_IMG")
-            if oso is None:
-                help_pic = "https://telegra.ph/file/144d8ea74fef8ca12253c.jpg"
-            else:
-                lol = [x for x in oso.split()]
-                PIC = list(lol)
-                help_pic = random.choice(PIC)
-            _result = main_menu()
-            if oso == "OFF":
-                result = builder.article(
-                    title="© Eaglebot Help",
-                    description="Help menu for Eaglebot",
-                    text=_result[0],
-                    buttons=_result[1],
-                    link_preview=False,
-                )
-            elif help_pic.endswith((".jpg", ".png")):
-                result = builder.photo(
-                    help_pic,
-                    text=_result[0],
-                    buttons=_result[1],
-                    link_preview=False,
-                )
-            elif help_pic:
-                result = builder.document(
-                    help_pic,
-                    text=_result[0],
-                    title="Eaglebot Help Menu",
-                    buttons=_result[1],
-                    link_preview=False,
-                )
-            await event.answer([result] if result else None)
-        elif str_y[0].lower() == "ytdl" and len(str_y) == 2:
-            link = get_yt_video_id(str_y[1].strip())
-            found_ = True
-            if link is None:
-                search = VideosSearch(str_y[1].strip(), limit=15)
-                resp = (search.result()).get("result")
-                if len(resp) == 0:
-                    found_ = False
-                else:
-                    outdata = await result_formatter(resp)
-                    key_ = rand_key()
-                    ytsearch_data.store_(key_, outdata)
-                    buttons = [
-                        Button.inline(
-                            f"1 / {len(outdata)}",
-                            data=f"ytdl_next_{key_}_1",
-                        ),
-                        Button.inline(
-                            "📜  List all",
-                            data=f"ytdl_listall_{key_}_1",
-                        ),
-                        Button.inline(
-                            "⬇️  Download",
-                            data=f'ytdl_download_{outdata[1]["video_id"]}_0',
-                        ),
-                    ]
-                    caption = outdata[1]["message"]
-                    photo = await get_ytthumb(outdata[1]["video_id"])
-            else:
-                caption, buttons = await download_button(link, body=True)
-                photo = await get_ytthumb(link)
-            if found_:
-                markup = event.client.build_reply_markup(buttons)
-                photo = types.InputWebDocument(
-                    url=photo, size=0, mime_type="image/jpeg", attributes=[]
-                )
-                text, msg_entities = await event.client._parse_message_text(
-                    caption, "html"
-                )
-                result = types.InputBotInlineResult(
-                    id=str(uuid4()),
-                    type="photo",
-                    title=link,
-                    description="⬇️ Click to Download",
-                    thumb=photo,
-                    content=photo,
-                    send_message=types.InputBotInlineMessageMediaAuto(
-                        reply_markup=markup, message=text, entities=msg_entities
-                    ),
-                )
-            else:
-                result = builder.article(
-                    title="Not Found",
-                    text=f"No Results found for `{str_y[1]}`",
-                    description="INVALID",
-                )
-            try:
-                await event.answer([result] if result else None)
-            except QueryIdInvalidError:
-                await event.answer(
-                    [
-                        builder.article(
-                            title="Not Found",
-                            text=f"No Results found for `{str_y[1]}`",
-                            description="INVALID",
-                        )
-                    ]
-                )
-        elif string == "age_verification_alert":
-            buttons = [
-                Button.inline(text="Yes I'm 18+", data="age_verification_true"),
-                Button.inline(text="No I'm Not", data="age_verification_false"),
-            ]
-            markup = event.client.build_reply_markup(buttons)
-            photo = types.InputWebDocument(
-                url="https://i.imgur.com/Zg58iXc.jpg",
-                size=0,
-                mime_type="image/jpeg",
-                attributes=[],
-            )
-            text, msg_entities = await event.client._parse_message_text(
-                "<b>ARE YOU OLD ENOUGH FOR THIS ?</b>", "html"
-            )
-            result = types.InputBotInlineResult(
-                id=str(uuid4()),
-                type="photo",
-                title="Age verification",
-                thumb=photo,
-                content=photo,
-                send_message=types.InputBotInlineMessageMediaAuto(
-                    reply_markup=markup, message=text, entities=msg_entities
-                ),
-            )
-            await event.answer([result] if result else None)
-        elif string == "pmpermit":
-            buttons = [
-                Button.inline(
-                    text="👨‍💻 Open PM Menu 💝", data="show_pmpermit_options"
-                ),
-            ]
-            PM_IMG = (
-                gvarstatus("PM_IMG")
-                or "https://telegra.ph/file/69fa26f4659e377dea80e.jpg"
-            )
-            if PM_IMG == "OFF":
-                EAGLE_IMG = None
-            else:
-                eagle = [x for x in PM_IMG.split()]
-                PIC = list(eagle)
-                EAGLE_IMG = random.choice(PIC)
-            query = gvarstatus("pmpermit_text")
-            if EAGLE_IMG and EAGLE_IMG.endswith((".jpg", ".jpeg", ".png")):
-                result = builder.photo(
-                    EAGLE_IMG,
-                    # title="Alive EAGLE",
-                    text=query,
-                    buttons=buttons,
-                )
-            elif EAGLE_IMG:
-                result = builder.document(
-                    EAGLE_IMG,
-                    title="Alive EAGLE",
-                    text=query,
-                    buttons=buttons,
-                )
-            else:
-                result = builder.article(
-                    title="Alive EAGLE",
-                    text=query,
-                    buttons=buttons,
-                )
-            await event.answer([result] if result else None)
-        else:
-            buttons = [
-                (
-                    Button.url("Source code", "https://github.com/EAGLE-AI/Eaglebot"),
-                    Button.url(
-                        "Deploy",
-                        "https://dashboard.heroku.com/new?button-url=https%3A%2F%2Fgithub.com%2FEAGLE-AI%2FEaglebot&template=https%3A%2F%2Fgithub.com%2FEAGLE-AI%2FEaglebot",
-                    ),
-                )
-            ]
-            ALV_PIC = "https://telegra.ph/file/8d79a264916a247fe28d2.jpg"
-            markup = event.client.build_reply_markup(buttons)
-            photo = types.InputWebDocument(
-                url=ALV_PIC, size=0, mime_type="image/jpeg", attributes=[]
-            )
-            text, msg_entities = await event.client._parse_message_text(
-                f"⚜ **Lêɠêɳ̃dẞø†** ⚜\n------------\n🔰 Owner ~ {mention}\n\n👨‍💻 Support ~ {Eagle_grp}",
-                "md",
-            )
-            result = types.InputBotInlineResult(
-                id=str(uuid4()),
-                type="photo",
-                title=f"Lêɠêɳ̃dẞø†",
-                description=f"Lêɠêɳ̃dẞø†\nhttps://t.me/Eaglebot_OP",
-                url="https://github.com/EAGLE-AI/Eaglebot",
-                thumb=photo,
-                content=photo,
-                send_message=types.InputBotInlineMessageMediaAuto(
-                    reply_markup=markup, message=text, entities=msg_entities
-                ),
-            )
-            await event.answer([result] if result else None)
-
-
-@eagle.tgbot.on(CallbackQuery(data=re.compile(b"clise")))
+@eagle.tgbot.on(CallbackQuery(data=re.compile(b"close")))
 @check_owner
 async def on_plug_in_callback_query_handler(event):
     buttons = [
-        (Button.inline("Re-Open Menu", data="mainmenu"),),
+        (Button.inline("Open Menu", data="mainmenu"),),
     ]
-    await event.edit(
-        f"📜 Menu Provider Has Been Closed\n\n🔰 Bot Of : {mention}\n\n             [©️Lêɠêɳ̃dẞø†](https://t.me/Eaglebot_OP)",
-        buttons=buttons,
-        link_preview=False,
-    )
+    await event.edit("Menu Closed", buttons=buttons)
 
 
 @eagle.tgbot.on(CallbackQuery(data=re.compile(b"check")))
 async def on_plugin_callback_query_handler(event):
-    text = f"Plugis: {len(PLG_INFO)}\
-        \nCommands: {len(CMD_INFO)}\
-        \n\n{tr}help <plugin> : for specific plugin info.\
-        \n{tr}help -l <commands> : for specific command info.\
+    text = f"𝙿𝚕𝚞𝚐𝚒𝚗𝚜: {len(PLG_INFO)}\
+        \n𝙲𝚘𝚖𝚖𝚊𝚗𝚍𝚜: {len(CMD_INFO)}\
+        \n\n{tr}𝚑𝚎𝚕𝚙 <𝚙𝚕𝚞𝚐𝚒𝚗> : 𝙵𝚘𝚛 𝚜𝚙𝚎𝚌𝚒𝚏𝚒𝚌 𝚙𝚕𝚞𝚐𝚒𝚗 𝚒𝚗𝚏𝚘.\
+        \n{tr}𝚑𝚎𝚕𝚙 -𝚌 <𝚌𝚘𝚖𝚖𝚊𝚗𝚍> : 𝙵𝚘𝚛 𝚊𝚗𝚢 𝚌𝚘𝚖𝚖𝚊𝚗𝚍 𝚒𝚗𝚏𝚘.\
+        \n{tr}𝚜 <𝚚𝚞𝚎𝚛𝚢> : 𝚃𝚘 𝚜𝚎𝚊𝚛𝚌𝚑 𝚊𝚗𝚢 𝚌𝚘𝚖𝚖𝚊𝚗𝚍𝚜.\
         "
     await event.answer(text, cache_time=0, alert=True)
 
@@ -731,9 +315,9 @@ async def on_plugin_callback_query_handler(event):
 async def on_plug_in_callback_query_handler(event):
     category = str(event.pattern_match.group(1).decode("UTF-8"))
     buttons = paginate_help(0, GRP_INFO[category], category)
-    text = f"**📜Category: **{category}\
-        \n**🔰Total plugins :** {len(GRP_INFO[category])}\
-        \n**🕹Total Commands:** {command_in_category(category)}"
+    text = f"**Category: **{category}\
+        \n**Total plugins :** {len(GRP_INFO[category])}\
+        \n**Total Commands:** {command_in_category(category)}"
     await event.edit(text, buttons=buttons)
 
 
@@ -749,9 +333,9 @@ async def on_plug_in_callback_query_handler(event):
     pgno = int(event.pattern_match.group(3).decode("UTF-8"))
     if mtype == "plugin":
         buttons = paginate_help(pgno, GRP_INFO[category], category)
-        text = f"**📜Category: **`{category}`\
-            \n**🔰Total plugins :** __{len(GRP_INFO[category])}__\
-            \n**🕹Total Commands:** __{command_in_category(category)}__"
+        text = f"**Category: **`{category}`\
+            \n**Total plugins :** __{len(GRP_INFO[category])}__\
+            \n**Total Commands:** __{command_in_category(category)}__"
     else:
         category_plugins = str(event.pattern_match.group(4).decode("UTF-8"))
         category_pgno = int(event.pattern_match.group(5).decode("UTF-8"))
@@ -763,9 +347,9 @@ async def on_plug_in_callback_query_handler(event):
             category_plugins=category_plugins,
             category_pgno=category_pgno,
         )
-        text = f"**🔰Plugin: **`{category}`\
-                \n**📜Category: **__{getkey(category)}__\
-                \n**🕹Total Commands:** __{len(PLG_INFO[category])}__"
+        text = f"**Plugin: **`{category}`\
+                \n**Category: **__{getkey(category)}__\
+                \n**Total Commands:** __{len(PLG_INFO[category])}__"
     await event.edit(text, buttons=buttons)
 
 
@@ -797,9 +381,9 @@ async def on_plug_in_callback_query_handler(event):
             category_plugins=category_plugins,
             category_pgno=category_pgno,
         )
-        text = f"**🔰Plugin: **`{category}`\
-                \n**📜Category: **__{getkey(category)}__\
-                \n**🕹Total Commands:** __{len(PLG_INFO[category])}__"
+        text = f"**Plugin: **`{category}`\
+                \n**Category: **__{getkey(category)}__\
+                \n**Total Commands:** __{len(PLG_INFO[category])}__"
         try:
             return await event.edit(text, buttons=buttons)
         except Exception as e:
@@ -853,11 +437,48 @@ async def on_plug_in_callback_query_handler(event):
                 "⬅️ Back ",
                 data=f"back_command_{category}_{pgno}_{category_plugins}_{category_pgno}",
             ),
-            Button.inline("Main Menu", data="mainmenu"),
+            Button.inline("⚙️ Main Menu", data="mainmenu"),
         )
     ]
-    text = f"**🕹Command :** `{tr}{cmd}`\
-        \n**🔰Plugin :** `{category}`\
-        \n**📍Category :** `{category_plugins}`\
-        \n\n**📜 Intro :**\n{CMD_INFO[cmd][0]}"
+    text = f"**Command :** `{tr}{cmd}`\
+        \n**Plugin :** `{category}`\
+        \n**Category :** `{category_plugins}`\
+        \n\n**✘ Intro :**\n{CMD_INFO[cmd][0]}"
     await event.edit(text, buttons=buttons)
+
+
+async def inline_search(event, query):
+    answers = []
+    builder = event.builder
+    if found := [i for i in sorted(list(CMD_INFO)) if query in i]:
+        for cmd in found:
+            title = f"Command:  {cmd}"
+            plugin = get_key(cmd)
+            try:
+                info = CMD_INFO[cmd][1]
+            except IndexError:
+                info = "None"
+            description = f"Plugin:  {plugin} \nCategory:  {getkey(plugin)}\n{info}"
+            text = await cmdinfo(cmd, event)
+            result = builder.article(
+                title=title,
+                description=description,
+                thumb=get_thumb("plugin_cmd.jpg"),
+                text=text,
+            )
+            answers.append(result)
+
+    if found := [i for i in sorted(list(PLG_INFO.keys())) if query in i]:
+        for plugin in found:
+            count = len(PLG_INFO[plugin])
+            if count > 1:
+                title = f"Plugin:  {plugin}"
+                text = await plugininfo(plugin, event, "-p")
+                result = builder.article(
+                    title=title,
+                    description=f"Category:  {getkey(plugin)}\nTotal Cmd: {count}",
+                    thumb=get_thumb("plugin.jpg"),
+                    text=text,
+                )
+                answers.append(result)
+    return answers
