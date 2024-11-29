@@ -14,7 +14,7 @@ class Development(Config):
     # After cloning the repo and installing requirements do python3 telesetup.py an fill th this
     EAGLE_STRING = "1BZWaqwUAUDwTRHrrXUXMJGkVfoFBiIswGqBMnvy0pEyg2Ck7pF3gVczqLDmLxblNVlcMRqIPSzgKS7N5UWEqA90okIp2vggZZmbfKcOrWyxleeg9IIKDhXTo0ustEHZBu40rIsJ3KR7gxKe4hQajejhSZaxkbhromyGBVbPlvWjWYwzLF2tCB0Nwr6lsgduZdu3SqaFXRaUlqOhckD0uS-KjLTxB7JY0xTsgl-a7M0Ld_GjAurENx3Bhn1qOLc0ruUcTvTiwF4zH2CvxUINgzeHcGpleHyTQ8cuJ4DeZ8YpT7DtOOEghr33inWQZzk6dKWRY5o6E1XyLvdM6mg3HSYahA3d9ZHY="
     # create a new bot in @botfather and fill the following vales with bottoken
-    BOT_TOKEN = "7737579995:AAHzTgISMQhZuEasuOBEm6aTn5mqes-f0aQ"
+    BOT_TOKEN = "8190406131:AAFHRyVisv_E1vEli731qet_BYdDf_t5D2M"
     # command handler
     HANDLER = "."
     # command hanler for sudo
@@ -24,7 +24,7 @@ class Development(Config):
     # Your City's TimeZone
     TZ = "Asia/Kolkata"
     RANDOM_STUFF_API_KEY = "20240908-1401-4740-801f-0d56de118901"
-    PRIVATE_GROUP_BOT_API_ID = -1002318388566
+    PRIVATE_GROUP_BOT_API_ID = -1002293505498
     # owner id
     OWNER_ID = 5144246533
     SPAM = "ON"
