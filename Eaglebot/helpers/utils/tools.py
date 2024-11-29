@@ -1,13 +1,12 @@
+import logging
 import os
+import random
 from typing import Optional
 
-from moviepy.editor import VideoFileClip
-from PIL import Image
+from PIL import Image, ImageOps
 
 from ...core.logger import logging
-from ...core.managers import eor
-from ..tools import media_type
-from .utils import runcmd
+from ..utils.utils import runcmd
 
 LOGS = logging.getLogger(__name__)
 
