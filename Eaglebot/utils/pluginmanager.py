@@ -10,7 +10,7 @@ from ..core.logger import logging
 from ..core.managers import eod, eor
 from ..core.session import eagle
 from ..helpers.tools import media_type
-from ..helpers.utils import _format, _eagletools, _eagleutils, install_pip, reply_id
+from ..helpers.utils import _format, _eagletoolss, _eagleutils, install_pip, reply_id
 from .decorators import admin_cmd, sudo_cmd
 
 LOGS = logging.getLogger("EagleUserBot")
