@@ -6,7 +6,7 @@ check = 0
 while type:
     try:
         from . import format as _format
-        from . import tools as _eagletools
+        from . import tools as _eagletoolss
         from . import utils as _eagleutils
         from .events import *
         from .format import *
